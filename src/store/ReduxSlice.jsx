@@ -4,13 +4,8 @@ const tasksSlice = createSlice({
   name: "tasks",
   initialState: JSON.parse(localStorage.getItem("todos")) || [],
   reducers: {
+    // add
     addTask: (state, action) => {
-      // state.push({
-      //   id: Math.random().toString(36).substr(2, 9),
-      //   content: action.payload,
-      //   completed: false,
-      //   createdAt: new Date().toLocaleString(),
-      // });
       const newTask = {
         id: Math.random().toString(36).substr(2, 9),
         content: action.payload,
@@ -20,6 +15,7 @@ const tasksSlice = createSlice({
       state.push(newTask);
       localStorage.setItem("todos", JSON.stringify(state)); 
     },
+    // edit
     editTask: (state, action) => {
       const { id, newContent } = action.payload;
       const taskToEdit = state.find((task) => task.id === id);
@@ -29,16 +25,14 @@ const tasksSlice = createSlice({
       localStorage.setItem("todos", JSON.stringify(state)); 
 
     },
+    // delete
     deleteTask: (state, action) => {
-      // const taskId = action.payload;
-      // return state.filter((task) => task.id !== taskId);
-      // localStorage.removeItem("todos", JSON.stringify(state));
       const taskId = action.payload;
       const updatedTasks = state.filter((task) => task.id !== taskId);
       localStorage.setItem("todos", JSON.stringify(updatedTasks)); 
       return updatedTasks;
     },
-  
+    // completed
     markAsCompleted: (state, action) => {
       const taskId = action.payload;
       const taskToComplete = state.find((task) => task.id === taskId);

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Grid, IconButton, Paper, Typography } from '@mui/material';
+import { Box, Grid, IconButton, Typography } from '@mui/material';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
@@ -8,22 +8,21 @@ const Carosal = () => {
     "https://swiperjs.com/demos/images/nature-4.jpg",
     "https://swiperjs.com/demos/images/nature-3.jpg",
     "https://swiperjs.com/demos/images/nature-5.jpg",
-    // Add more image URLs as needed
   ];
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
+  // Previous button
   const goToPrevious = () => {
     setCurrentImageIndex((prevIndex) =>
       prevIndex === 0 ? images.length - 1 : prevIndex - 1
     );
   };
-
+  // Next button
   const goToNext = () => {
     setCurrentImageIndex((prevIndex) =>
       prevIndex === images.length - 1 ? 0 : prevIndex + 1
     );
   };
-
+  // clicking the image to show it
   const handleImageClick = (index) => {
     setCurrentImageIndex(index);
   };
@@ -34,7 +33,7 @@ const Carosal = () => {
         <Box elevation={3}>
           <img
             src={images[currentImageIndex]}
-            alt={`Image ${currentImageIndex + 1}`}
+            alt={`imgs ${currentImageIndex + 1}`}
             style={{ maxWidth: '100%', maxHeight: '400px' }}
           />
         </Box>
@@ -56,7 +55,7 @@ const Carosal = () => {
             <Grid item key={index}>
               <img
                 src={image}
-                alt={`Image ${index + 1}`}
+                alt={` img ${index + 1}`}
                 style={{ width: '50px', cursor: 'pointer' }}
                 onClick={() => handleImageClick(index)}
               />
