@@ -20,19 +20,17 @@ import { addTask, editTask, deleteTask, markAsCompleted } from "../store/ReduxSl
 import styled from "@emotion/styled";
 
 const Todo = () => {
-  //for modal
-  const [open, setOpen] = React.useState(false);
+ 
+  //states for modal
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
   //----------------------------------------------------
-  const tasks = useSelector((state) => state.tasks);
-  const dispatch = useDispatch();
-  const [newTaskContent, setNewTaskContent] = useState("");
-  const [isAdding, setIsAdding] = useState(false);
   //style
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
-      backgroundColor: 'gray',
+      backgroundColor: '#dadada59',
     },
     // hide last border
     '&:last-child td, &:last-child th': {
@@ -47,13 +45,26 @@ const Todo = () => {
     transform: 'translate(-50%, -50%)',
     width: 400,
     bgcolor: 'background.paper',
-    border: '2px solid gray',
+    border: '2px solid #dadada59',
     boxShadow: 24,
     p: 4,
-    display: 'flex', 
+    display: 'flex',
     justifyContent: 'center',
     flexDirection: 'column'
   };
+
+  const cellHead={
+    fontSize:'17px',
+    fontWeight:'bold'
+  }
+  //-----------------------------------------------------
+  const tasks = useSelector((state) => state.tasks);
+  const dispatch = useDispatch();
+  const [newTaskContent, setNewTaskContent] = useState("");
+  const [isAdding, setIsAdding] = useState(false);
+
+ 
+
   const handleAdd = () => {
     dispatch(addTask(newTaskContent));
     setNewTaskContent("");
@@ -111,10 +122,10 @@ const Todo = () => {
               </Tooltip>
               <Tooltip
                 title={
-                  task.completed ? "Mark as Incomplete" : "Mark as Completed"
+                  task.completed ? "Mark as Completed" : "Mark as Incomplete"
                 }
               >
-                <IconButton onClick={() => handleCompleted(task.id)} sx={{fontSize:'15px'}}>
+                <IconButton onClick={() => handleCompleted(task.id)} color={task.completed?'success':'error'} sx={{ fontSize: '15px' }}>
                   {task.completed ? "Completed" : "Incomplete"}
                 </IconButton>
               </Tooltip>
@@ -126,56 +137,64 @@ const Todo = () => {
   };
 
   return (
+  
     <>
+      {/* add task button */}
       {isAdding ? (
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Button color="secondary" variant="contained" sx={{my:4}}>Add New Task</Button>
-
-        <Modal
-          keepMounted
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="keep-mounted-modal-title"
-          aria-describedby="keep-mounted-modal-description"
-        >
-          <Box sx={ModalStyle}>
-          <Typography variant="h5" my={2} textAlign={'center'}>
-            Add You Task
-          </Typography>
-            <Box sx={{ display: 'flex', justifyContent: 'center',gap:'20px',my:1 }} >
-              <TextField
-                value={newTaskContent}
-                onChange={(e) => setNewTaskContent(e.target.value)}
-                sx={{}}
-              />
-              <Button onClick={handleAdd} color="secondary" variant="contained" >Add</Button>
+          <Button onClick={() => { handleOpen() }} color="secondary" variant="contained" sx={{ my: 4 }}>Add New Task</Button>
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={ModalStyle}>
+              <Typography variant="h5" my={2} textAlign={'center'}>
+                Add You Task
+              </Typography>
+              <Box sx={{ display: 'flex', justifyContent: 'center', gap: '20px', my: 1 }} >
+                <TextField
+                  value={newTaskContent}
+                  onChange={(e) => setNewTaskContent(e.target.value)}
+                  sx={{}}
+                />
+                <Button onClick={handleAdd} disabled={newTaskContent === ""} color="secondary" variant="contained" >Add</Button>
+              </Box>
             </Box>
-          </Box>
-        </Modal>
+          </Modal>
         </Box>
       ) : (
         <Box sx={{ display: 'flex', justifyContent: 'center' }} >
-          <Button onClick={() => { setIsAdding(true); handleOpen() }} color="secondary" variant="contained" sx={{my:4}}>Add New Task</Button>
+          <Button onClick={() => { setIsAdding(true);handleOpen() }} color="secondary" variant="contained" sx={{ my: 4 }}>Add New Task</Button>
         </Box>
       )}
+      {/* ----------------------------------------- */}
       <Stack sx={{ display: 'flex', justifyContent: 'center', mx: 6 }}>
-        <Table sx={{ border: '1px solid #00000030' }}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Created At</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {tasks.map((task) => (
-              <TaskRow key={task.id} task={task} />
-            ))}
-          </TableBody>
-        </Table>
+        {tasks.length === 0 ? (
+          <Typography variant="h3" textAlign={'center'} pt={20} color="secondary">There is no Todos</Typography>
+        ) :
+          (
+
+            <Table sx={{ border: '1px solid #00000030' }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={cellHead}>Name</TableCell>
+                  <TableCell sx={cellHead}>Created At</TableCell>
+                  <TableCell sx={cellHead}>Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {tasks.map((task) => (
+                  <TaskRow key={task.id} task={task} />
+                ))}
+              </TableBody>
+            </Table>
+          )}
       </Stack>
 
     </>
+
   );
 };
 
